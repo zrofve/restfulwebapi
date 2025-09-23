@@ -40,6 +40,23 @@ class ProductSerializer(serializers.ModelSerializer):
         items = ShoppingCartItem.objects.filter(product=instance)
         return CartItemSerializer(items,many=True).data
 
+class ProductStatSerializer(serializers.Serializer): #serializers that is not tied to any model
+    stats = serializers.DictField(
+        child = serializers.ListField(
+            child = serializers.ImageField(),
+        )
+    )
+
+
+
+
+
+
+
+
+
+
+
 # before refactor
 # class ProductSerializer(serializers.ModelSerializer):
 #     class Meta:
