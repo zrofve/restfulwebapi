@@ -87,7 +87,7 @@ class ProductStats(GenericAPIView):
         serializer = ProductStatSerializer({
             'stats': {
                 '2019-01-01': [5, 10, 15],
-                '2019-09-02': [20, 1, 1]
+                '2019-02-02': [20, 1, 1]
             }
         })
         return Response(serializer.data)
