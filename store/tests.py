@@ -38,3 +38,11 @@ class ProductDestroyTestCase(APITestCase):
             Product.DoesNotExist,
             Product.objects.get, id=product_id,
         )
+class ProductListTestCase(APITestCase):
+    def test_list_products(self):
+        product_count = Product.objects.count()
+        response = self.client.get('/api/v1/products/')
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+        self.assertEqual(response.data['count'], product_count)
+        self.assertEqual(len(response.data['results']), product_count)
