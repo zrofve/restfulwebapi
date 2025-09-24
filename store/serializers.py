@@ -48,13 +48,13 @@ class ProductSerializer(serializers.ModelSerializer):
         items = ShoppingCartItem.objects.filter(product=instance)
         return CartItemSerializer(items,many=True).data
     
-    def update(self, instance, validate_data):
-        if validate_data.get('warranty', None):
+    def update(self, instance, validated_data):
+        if validated_data.get('warranty', None):
             instance.description += '\n\nWarranty Information:\n'
             instance.description += b'; ' .join(
-                validate_data['warranty'].readlines()
+                validated_data['warranty'].readlines()
             ).decode()
-        return instance
+        return super().update(instance, validated_data)
     def create(self, validated_data):
         validated_data.pop('warranty')
         return Product.objects.create(**validated_data)
