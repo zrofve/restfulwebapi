@@ -16,15 +16,17 @@ class ProductSerializer(serializers.ModelSerializer):
     cart_items = serializers.SerializerMethodField()
     # price = serializers.FloatField(min_value=1.00, max_value=100000.00)
     price = serializers.DecimalField(
-        min_value=1.00, max_value=100000.00, 
+        min_value=1, max_value=100000, 
         max_digits=None, decimal_places=2
         )
     sale_start = serializers.DateTimeField(
+        required=False,
         input_formats=['%I:%M %p %d %B %Y'], format=None, allow_null=True,
         help_text='Accepted format is "12:01 AM 05 November 2025"',
         style={'input_type':'text', 'placeholder':'12:01 AM 05 November 2025'}
     )
     sale_end = serializers.DateTimeField(
+        required=False,
         input_formats=['%I:%M %p %d %B %Y'], format=None, allow_null=True,
         help_text='Accepted format is "12:01 AM 05 November 2025"',
         style={'input_type':'text', 'placeholder':'12:01 AM 05 November 2025'}
@@ -53,6 +55,9 @@ class ProductSerializer(serializers.ModelSerializer):
                 validate_data['warranty'].readlines()
             ).decode()
         return instance
+    def create(self, validated_data):
+        validated_data.pop('warranty')
+        return Product.objects.create(**validated_data)
 
 class ProductStatSerializer(serializers.Serializer): #serializers that is not tied to any model
     stats = serializers.DictField(
